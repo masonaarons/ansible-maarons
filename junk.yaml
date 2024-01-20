@@ -1,0 +1,18 @@
+- name: Execute yum command
+  ansible.windows.win_shell:
+    cmd: yum
+    creates: /path/to/file
+
+- name: Asynchronous yum task
+  ansible.windows.win_command: yum
+  async: 1000
+  poll: 0
+  register: long_cmd
+
+- name: Wait for asynchronous job to end
+  ansible.builtin.async_status:
+    jid: '{{ long_cmd.ansible_job_id }}'
+  register: job_result
+  until: job_result.finished
+  retries: 100
+  delay: 10

@@ -1,0 +1,62 @@
+---
+# tasks file for async
+- name: async playbook
+  hosts: localhost
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    ansible_ssh_private_key_file: /home/ubuntu/.ssh/id_rsa
+  vars_files:
+    - vars/main.yml
+  roles:
+    - role: async
+      tags:
+        - async
+        - all
+  environment:
+    AWS_ACCESS_KEY_ID: <YOUR_AwsAccessKey_HERE>
+    AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    AWS_DEFAULT_REGION: us-east-1
+    ANSIBLE_HOST_KEY_CHECKING: False
+    ANSIBLE_DISPLAY_SKIPPED_HOSTS: False
+    ANSIBLE_FORCE_COLOR: True
+  hosts: myhosts
+  tasks:
+   - name: Ping my hosts
+  connection: local
+  gather_facts: no
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+    ansible_ssh_private_key_file: /home/ubuntu/.ssh/id_rsa
+  vars_files:
+    - vars/main.yml
+  roles:
+    - role: async
+      tags:
+        - async
+        - all
+  environment:
+    AWS_ACCESS_KEY_ID: <YOUR_AwsAccessKey_HERE>
+    AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+    AWS_DEFAULT_REGION: us-east-1
+    ANSIBLE_HOST_KEY_CHECKING: False
+    ANSIBLE_DISPLAY_SKIPPED_HOSTS: False
+    ANSIBLE_FORCE_COLOR: True
+  hosts: myhosts
+  tasks:
+   - name: Ping my hosts
+     ansible.builtin.ping:
+     async: 100
+     poll: 0
+
+   - name: Print message
+     ansible.builtin.debug:
+      msg: Hello world
